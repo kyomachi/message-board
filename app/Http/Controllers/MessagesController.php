@@ -132,6 +132,10 @@ class MessagesController extends Controller
     public function store(Request $request)
      // 保存するのはリクエストクラスから生成されたリクエストインスタンス
     {
+        $this->validate($request, [
+            'content' => 'required|max:191',
+        ]);
+
         $message = new Message;
         /*
             Message モデルの空のインスタンスを作成
@@ -224,17 +228,14 @@ class MessagesController extends Controller
     {
         $message = Message::find($id);
 
-        /*
-        'message'は
-            viewファイル（edit.blade.php）でデータの呼び出しに使うための変数名をここで指定している。
-               
-               'message'という名前には特に命名規則はなく、例えば
-               'test' として、view ファイル（show.blade.php）内で'test'を使えば、
-               $message という変数の中身が呼び出されて、viewファイル（show.blade.php）に表示される
-
-                    $messages = Message::find($id); としただけでは、
-                    Viewファイル（show.blade.php）にはデータが渡らないので、ここで指定しています
-        */
+         /*変数 message には、
+          Message モデル（namespace、use がなければ App\Message）
+          がデータベースで参照したレコードの一覧（::all()）が代入される*/
+        
+        /*基本的にモデルのためのクラス名（Message）は頭文字が大文字で単数形というのがセオリー*/
+        
+        /*$id が指定されているので、 Message::find($id) によって1つだけ取得します。
+          そのため、 $message 変数も単数形の命名にしています。*/
 
         return view('messages.edit', [
             /* view()は、Controller から特定の Viewファイルを呼び出す
@@ -274,12 +275,36 @@ class MessagesController extends Controller
 
      // putまたはpatchでmessages/idにアクセスされた場合の「更新処理」
     public function update(Request $request, $id)
+    
+    /* 更新するのは、あるidを持っている、リクエストクラスから生成されたリクエストインスタンス */
     {
-        $message = Message::find($id);
-        $message->content = $request->content;
-        $message->save();
+        $this->validate($request, [
+            'content' => 'required|max:191',
+        ]);
 
+        $message = Message::find($id);
+        /*変数 message には、
+          Message モデル（namespace、use がなければ App\Message）
+          がデータベースで参照したレコードの一覧（::all()）が代入される*/
+        
+        /*基本的にモデルのためのクラス名（Message）は頭文字が大文字で単数形というのがセオリー*/
+        
+        /*$id が指定されているので、 Message::find($id) によって1つだけ取得します。
+          そのため、 $message 変数も単数形の命名にしています。*/
+        $message->content = $request->content;
+        /*
+            $messeage インスタンスが呼び出したメッセージ（content カラム）には
+            $repuest インスタンスが呼び出したメッセージ（content カラム）が代入される
+        */
+        $message->save();
+        /*
+            $message インスタンスを保存する
+        */
         return redirect('/');
+        /*
+            View を返さずに / へリダイレクト（自動でページを移動）させています。
+            View を作成しても良いですが、わざわざ作成する必要もないでしょう。
+        */
     }
 
     /**
@@ -293,8 +318,27 @@ class MessagesController extends Controller
     public function destroy($id)
     {
         $message = Message::find($id);
+        /*
+        'message'は
+            viewファイル（update.blade.php）でデータの呼び出しに使うための変数名をここで指定している。
+               
+               'message'という名前には特に命名規則はなく、例えば
+               'test' として、view ファイル（update.blade.php）内で'test'を使えば、
+               $message という変数の中身が呼び出されて、viewファイル（update.blade.php）に表示される
+
+                    $messages = Message::find($id); としただけでは、
+                    Viewファイル（update.blade.php）にはデータが渡らないので、ここで指定しています
+        */
         $message->delete();
+        /*
+        Message モデルから抽出された id を持つ $message を削除する
+        delete は モデルで使用する CRUD 関数
+        */
 
         return redirect('/');
+        /*
+            View を返さずに / へリダイレクト（自動でページを移動）させています。
+            View を作成しても良いですが、わざわざ作成する必要もないでしょう。
+        */
     }
 }

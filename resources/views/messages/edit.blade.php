@@ -40,7 +40,7 @@
                         store と違って update のルーティングには$message->id を渡す必要があります。
                             'route' => ['messages.update', $message->id] と指定。
                                 配列の2つ目に $message->id を入れることで
-                                update の URL である/messages/{messages} の {messages} に id が入ります。 
+                                update の URL である/messages/{message} の {message} に id が入ります。 
 
     -->
 
