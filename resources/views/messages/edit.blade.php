@@ -11,7 +11,10 @@
             この $message インスタンスは $message = Message::find($id); としてセットされている。
     -->
 
-    {!! Form::model($message, ['route' => ['messages.update', $message->id], 'method' => 'put']) !!}
+   {!! Form::model($message, ['route' => ['messages.update', $message->id], 'method' => 'put']) !!}
+
+        {!! Form::label('title', 'タイトル:') !!}
+        {!! Form::text('title') !!}
 
         {!! Form::label('content', 'メッセージ:') !!}
         {!! Form::text('content') !!}
@@ -19,6 +22,8 @@
         {!! Form::submit('更新') !!}
 
     {!! Form::close() !!}
+
+@endsection
 
     <!--
         1．フォームの全体
@@ -76,5 +81,3 @@
                     action 属性へフォームの入力内容が送られます。
 
     -->
-
-@endsection

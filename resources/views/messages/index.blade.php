@@ -9,7 +9,8 @@
             @foreach ($messages as $message)
                 <!-- 配列 messages の中の各データを変数 message として一つずつ取り出す -->
                 <!-- <li>{{ $message->content }}</li> -->
-               <li>{!! link_to_route('messages.show', $message->id, ['id' => $message->id]) !!} : {{ $message->content }}</li>
+               <li>{!! link_to_route('messages.show', $message->id, ['id' => $message->id]) !!} : {{ $message->title }} > {{ $message->content }}</li>
+            @endforeach
 
                 <!-- 作成するリンクの内容は
                         1．'messages.show'            詳細ページ（show.blade.php）
@@ -19,8 +20,6 @@
                                                       文字列 id は show.blade.php に <h1>id ... とされているもの
                         4．{{ $message->content }}    MessagesController で設定した $message は content を取り出して表示する
                 -->
-
-            @endforeach
         </ul>
     @endif
 

@@ -133,6 +133,7 @@ class MessagesController extends Controller
      // 保存するのはリクエストクラスから生成されたリクエストインスタンス
     {
         $this->validate($request, [
+            'title' => 'required|max:191',
             'content' => 'required|max:191',
         ]);
 
@@ -145,6 +146,7 @@ class MessagesController extends Controller
                         store.blade.php（ビュー側）にモデルのインスタンスを渡す必要がある。
         */
 
+        $message->title = $request->title;
         $message->content = $request->content;
 
         /*
@@ -279,6 +281,7 @@ class MessagesController extends Controller
     /* 更新するのは、あるidを持っている、リクエストクラスから生成されたリクエストインスタンス */
     {
         $this->validate($request, [
+            'title' => 'required|max:191',
             'content' => 'required|max:191',
         ]);
 
@@ -291,6 +294,8 @@ class MessagesController extends Controller
         
         /*$id が指定されているので、 Message::find($id) によって1つだけ取得します。
           そのため、 $message 変数も単数形の命名にしています。*/
+
+        $message->title = $request->title;
         $message->content = $request->content;
         /*
             $messeage インスタンスが呼び出したメッセージ（content カラム）には
